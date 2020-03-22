@@ -68,8 +68,8 @@ export default class Main extends Component<Props, State> {
   canvasLayered: HTMLCanvasElement
   ctxLayered: CanvasRenderingContext2D
   resolution = {
-    x: 20,
-    y: 20
+    x: 30,
+    y: 30
   }
   dimension = {
     x: 600,
@@ -173,42 +173,56 @@ export default class Main extends Component<Props, State> {
   moveKey = (evt: React.SyntheticEvent<HTMLCanvasElement, KeyboardEvent>) => {
     switch (evt.nativeEvent.key) {
       case 'w':
-        console.log('up')
-        for (var i = 0; i < this.resolution.x; i++) {
-          for (var j = 0; j < this.resolution.y; j++) {
-            this.ctxLayered.fillStyle = 'black'
-            this.ctxLayered.fillRect(i * this.step.x, j * this.step.y, this.step.x, this.step.y);
-            console.log(this.saveCoord.x, i - 1)
-            if (this.saveCoord.x > i - 1 && this.saveCoord.x <= (i + 1)){
-              // && this.saveCoord.y > j && this.saveCoord.y <= (j + 1)) {
-              this.ctxLayered.fillStyle = 'transparent'
-              this.saveCoord.x = i
-              this.ctxLayered.clearRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y)
-              this.ctxLayered.fillRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y);
-            }
+        for (var j = 0; j < this.resolution.y; j++) {
+          this.ctxLayered.fillStyle = 'black'
+          this.ctxLayered.fillRect(this.saveCoord.x * this.step.x, j * this.step.y, this.step.x, this.step.y);
+          if (this.saveCoord.y > (j - 1) && this.saveCoord.y <= (j + 1)
+          ) {
+            this.ctxLayered.fillStyle = 'transparent'
+            this.saveCoord.y = j
+            this.ctxLayered.clearRect(this.saveCoord.x * this.step.x, j * this.step.y, this.step.x, this.step.y)
           }
         }
         break;
       case 's':
-        console.log('down')
-        for (var i = 0; i < this.resolution.x; i++) {
-          for (var j = 0; j < this.resolution.y; j++) {
-            this.ctxLayered.fillStyle = 'black'
-            this.ctxLayered.fillRect(i * this.step.x, j * this.step.y, this.step.x, this.step.y);
-            if (this.saveCoord.x > i - 1  && this.saveCoord.x + 1 < (i + 1)) {
-              this.ctxLayered.fillStyle = 'transparent'
-              this.saveCoord.x = i
-              this.ctxLayered.clearRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y)
-              this.ctxLayered.fillRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y);
-            }
+        for (var j = 0; j < this.resolution.y; j++) {
+          if (this.saveCoord.y === this.resolution.y - 1) break;
+          this.ctxLayered.fillStyle = 'black'
+          this.ctxLayered.fillRect(this.saveCoord.x * this.step.x, j * this.step.y, this.step.x, this.step.y);
+          if (this.saveCoord.y <= (j - 1)/*  && this.saveCoord.y > (j + 1) */
+          ) {
+            this.ctxLayered.fillStyle = 'transparent'
+            this.saveCoord.y = j
+            this.ctxLayered.clearRect(this.saveCoord.x * this.step.x, j * this.step.y, this.step.x, this.step.y)
+            break;
           }
         }
         break;
       case 'a':
-        console.log('left')
+        for (var i = 0; i < this.resolution.x; i++) {
+          this.ctxLayered.fillStyle = 'black'
+          this.ctxLayered.fillRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y);
+          if (this.saveCoord.x > (i - 1) && this.saveCoord.x <= (i + 1)
+          ) {
+            this.ctxLayered.fillStyle = 'transparent'
+            this.saveCoord.x = i
+            this.ctxLayered.clearRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y)
+          }
+        }
         break;
       case 'd':
-        console.log('right')
+        for (var i = 0; i < this.resolution.y; i++) {
+          if (this.saveCoord.x === this.resolution.x - 1) break;
+          this.ctxLayered.fillStyle = 'black'
+          this.ctxLayered.fillRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y);
+          if (this.saveCoord.x <= (i - 1)/*  && this.saveCoord.y > (j + 1) */
+          ) {
+            this.ctxLayered.fillStyle = 'transparent'
+            this.saveCoord.x = i
+            this.ctxLayered.clearRect(i * this.step.x, this.saveCoord.y * this.step.y, this.step.x, this.step.y)
+            break;
+          }
+        }
         break;
       default:
         break;
