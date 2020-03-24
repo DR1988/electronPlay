@@ -46,8 +46,8 @@ async function createWindow() {
   // await installExtensions()
 
   mainWindow = new BrowserWindow({
-    width: 500,
-    height: 600,
+    width: 1500,
+    height: 1600,
     webPreferences: {
       nodeIntegration: true,
     },
