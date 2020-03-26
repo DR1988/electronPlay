@@ -9,4 +9,14 @@
     pointer-events: none;
     border: 1px solid red;
   }
+  button.next{
+    position: absolute;
+    left: 558px;
+    top: 602px
+  }
+  button.stop{
+    position: absolute;
+    left: 500px;
+    top: 602px;
+  }
 }

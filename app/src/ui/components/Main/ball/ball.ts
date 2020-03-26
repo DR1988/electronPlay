@@ -8,15 +8,17 @@ export default class Particle {
   private vy: number
   private radius: number
   private mass: number
-  private count: number
-  constructor({ rx, ry, vx, vy, r, m }:
-    { rx: number, ry: number, vx: number, vy: number, r: number, m: number }) {
+  private count: number = 0
+  private color: string
+  constructor({ rx, ry, vx, vy, r, m, color = 'red' }:
+    { rx: number, ry: number, vx: number, vy: number, r: number, m: number, color?: string}) {
     this.rx = rx
     this.ry = ry
     this.vx = vx
     this.vy = vy
     this.radius = r
     this.mass = m
+    this.color = color
   }
   public move(dt: number, width = 1, height = 1) {
     if ((this.rx + this.vx * dt < this.radius) || (this.rx + this.vx * dt > width - this.radius)) { this.vx = -this.vx; }
@@ -39,11 +41,15 @@ export default class Particle {
     if (d < 0) return Infinity;
     return -(dvdr + Math.sqrt(d)) / dvdv;
   }
-  public timeToHitVerticalWall(): number {
-    return 1
+  public timeToHitVerticalWall(width = 1): number {
+    if (this.vx > 0) return (width - this.rx - this.radius) / this.vx;
+    else if (this.vx < 0) return (this.radius - this.rx) / this.vx;
+    else return Infinity;
   }
-  public timeToHitHorizontalWall(): number {
-    return 1
+  public timeToHitHorizontalWall(height = 1): number {
+    if (this.vy > 0) return (height - this.ry - this.radius) / this.vy;
+    else if (this.vy < 0) return (this.radius - this.ry) / this.vy;
+    else return Infinity;
   }
 
   public getCoordinates() {
@@ -74,26 +80,52 @@ export default class Particle {
     this.count++;
     that.count++;
   }
-  public bounceOffVerticalWall() { }
-  public bounceOffHorizontalWall() { }
+  public bounceOffVerticalWall() {
+    this.vx = -this.vx
+    this.count++
+  }
+  public bounceOffHorizontalWall() {
+    this.vy = -this.vy
+    this.count++
+  }
+
+  public getCount(): number {
+    return this.count
+  }
+
+  public getColor(): string {
+    return this.color
+  }
 }
 
 export class Event implements IComparable<Event> {
-  private time: number // time of event
-  private a: Particle
-  private b: Particle // particles involved in event
+  public time: number // time of event
+  public a: Particle
+  public b: Particle // particles involved in event
   private countA: number
   private countB: number; // collision counts for a and b
 
-  public Event(t: number, a: Particle, b: Particle) {
+  constructor(t: number, a: Particle, b: Particle) {
     this.time = t
     this.a = a
     this.b = b
-   }
+    if (a !== null) {
+      this.countA = a.getCount()
+    } else {
+      this.countA--
+    }
+    if (b !== null) {
+      this.countB = b.getCount()
+    } else {
+      this.countB--
+    }
+  }
 
-  public compareTo(that: Event): number { return this.time - that.time; }
+  public compareTo(that: Event): number { return this.time - that.time }
 
   public isValid(): boolean {
-    return true
+    if (this.a != null && this.a.getCount() != this.countA) return false;
+    if (this.b != null && this.b.getCount() != this.countB) return false;
+    return true;
   }
 }
