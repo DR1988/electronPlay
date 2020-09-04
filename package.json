@@ -79,7 +79,7 @@
     "eslint-plugin-react": "^7.12.4",
     "file-loader": "^3.0.1",
     "mini-css-extract-plugin": "^0.5.0",
-    "node-sass": "4.7.2",
+    "node-sass": "4.13.1",
     "react-hot-loader": "^4.6.5",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
