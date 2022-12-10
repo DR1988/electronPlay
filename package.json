@@ -93,7 +93,7 @@
     "webpack-hot-middleware": "^2.24.3"
   },
   "dependencies": {
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "normalize.css": "^8.0.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.2",
